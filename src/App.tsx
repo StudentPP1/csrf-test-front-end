@@ -10,9 +10,10 @@ const App: React.FC = () => {
 
   const api = axios.create({
     baseURL: "http://localhost:8080",
-    withCredentials: true,
+    withCredentials: true, // to send CSRF-token & session in cookie 
   });
 
+  // get CSRF-token & set in state 
   const fetchCsrfToken = async () => {
     const response = await api.get("/csrf-token");
     console.log("getting csrf token: " + response.data.token)
@@ -23,6 +24,7 @@ const App: React.FC = () => {
     const response = await api.post(
       "/auth/register",
       { name, username, password },
+      // send CSRF-token in Header with POST request
       { headers: { "X-XSRF-TOKEN": csrfToken } }
     );
     console.log(response.data);
